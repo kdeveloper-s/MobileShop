@@ -8,3 +8,6 @@ class MobilePhone(models.Model):
     color2 = models.CharField(max_length=50)
     color3 = models.CharField(max_length=50)
     camera_resolution = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.brand + " " + self.model
