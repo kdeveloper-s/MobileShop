@@ -11,34 +11,32 @@
                   Shop
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Mobile Phones</a></li>
+                  <li><a class="dropdown-item" href="{% url 'phones' %}">Mobile Phones</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Accessories</a></li>
+                  <li><a class="dropdown-item" href="{% url 'accessories' %}">Accessories</a></li>
                 </ul>
               </li>
-              <li class="nav-item"><a class="nav-link active" href="#!">About</a></li>
+              <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>
           </ul>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
 
-          <form class="d-flex">
+          <form class="d-flex" action="{% url 'cart' %}">
               <button class="btn btn-outline-dark" type="submit" style="margin-left: 1rem;">
                   <img src="../static/shopping-cart.svg" width="25px">
                   Cart
                   <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
               </button>
-              <button class="btn btn-outline-dark" type="submit" style="margin-left: 1rem;">
-                <img src="../static/avatar.svg" width="25px">
-                Sigin
-            </button>
+              
           </form>
-          <form class="d-flex">
-
+          <form class="d-flex" action="{% url 'login' %}">
+            <button class="btn btn-outline-dark" type="submit" style="margin-left: 1rem;">
+                <img src="../static/avatar.svg" width="25px">
+                Sign In
+            </button>
         </form>
-
-
 
       </div>
 

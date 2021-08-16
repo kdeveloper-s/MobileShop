@@ -6,3 +6,16 @@ def index(request):
 
 def phones(request):
     return render(request, "shop/phones.html")
+
+def accessories(request):
+    return render(request, "shop/accessories.html")
+
+def guide(request):
+    return render(request, "shop/guide.html")
+
+
+def cart(request):
+    return render(request, "shop/cart.html")
+    
+def login(request):
+    return render(request, "shop/login.html")
