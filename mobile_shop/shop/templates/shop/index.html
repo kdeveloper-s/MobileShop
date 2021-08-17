@@ -8,5 +8,11 @@ Home
 
 {% block content %}
 <!-- <h3 style="color: red">Home page!</h3> -->
+
+{% if user.is_authenticated %}
+<h3 style="color: red">Hello User</h3>
+
+{% endif %}
+
 {% endblock content %}
 
