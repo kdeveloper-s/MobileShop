@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect
+
+from .models import *
+
 from .forms import NewUserForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -12,15 +15,15 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-# Create your views here.
-
-
 def index(request):
     return render(request, "shop/index.html")
 
 
 def phones(request):
-    return render(request, "shop/phones.html")
+	mobilephones = MobilePhone.objects.all()
+	context = {'phones': mobilephones}
+	return render(request, "shop/phones.html", context)
+
 
 
 def accessories(request):
@@ -50,6 +53,7 @@ def register_request(request):
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render(request=request, template_name="registration/register_request.html", context={"register_form": form})
+
 
 
 def login_request(request):
