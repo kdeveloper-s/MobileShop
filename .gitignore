@@ -130,4 +130,3 @@ dmypy.json
 
 # IntelliJ IDEA
 .idea
-./shop/migrations/
