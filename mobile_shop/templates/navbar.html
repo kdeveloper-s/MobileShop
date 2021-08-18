@@ -1,53 +1,89 @@
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container px-4 px-lg-5">
-      <a class="navbar-brand" href="{% url 'index' %}"><img src="../static/mobileshop.png" width="150px"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-              <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Shop
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="{% url 'phones' %}">Mobile Phones</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'accessories' %}">Accessories</a></li>
-                </ul>
-              </li>
-              <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>
+<div class="container px-4 px-lg-5 bg-light" style="max-width: 100%; min-width: 70%;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="display: table; width: 100%">
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+        class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4" style="align-items: center;">
+        <li><a class="navbar-brand" href="{% url 'index' %}"><img src="../static/mobileshop.png" width="150px"></a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Shop
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'phones' %}">Mobile Phones</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'accessories' %}">Accessories</a></li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+        </li>
+        <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
 
-          <form class="d-flex" action="{% url 'cart' %}">
-              <button class="btn btn-outline-dark" type="submit" style="margin-left: 1rem;">
-                  <img src="../static/shopping-cart.svg" width="25px">
-                  Cart
-                  <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-              </button>
-              
-          </form>
-          <form class="d-flex" >
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="../static/avatar.svg" width="25px">
-                      Sign In
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
-                    </ul>
-                  </li>
-                </ul>
-            </form>
+      <form class="d-flex" action="{% url 'cart' %}">
+        <div style="margin: auto; padding: 10px">
+          <button class="btn btn-outline-dark" type="submit">
+            <img src="../static/shopping-cart.svg" width="25px">
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+          </button>
+        </div>
+      </form>
 
+      <form class="d-flex">
+        <div style="margin: auto; padding: 10px; align-items: center">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item dropdown">
+
+            
+              {% if user.is_authenticated %}
+
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="../static/avatar.svg" width="25px">
+                {{ user.get_username }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="">Account</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a></li>
+              </ul>
+
+              {% else %}
+
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="../static/avatar.svg" width="25px">
+                Sign In
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
+              </ul>
+
+              {% endif %}
+
+
+          </li>
+        </ul>
       </div>
+      </form>
 
-  </div>
-</nav>
+    </div>
+  </nav>
+</div>
