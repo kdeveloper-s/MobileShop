@@ -131,3 +131,4 @@ dmypy.json
 # IntelliJ IDEA
 .idea
 ./shop/migrations/
+0001_initial.py
