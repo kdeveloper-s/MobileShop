@@ -16,11 +16,19 @@
             Shop
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'phones' %}">Mobile Phones</a></li>
+            <li><a class="dropdown-item" href="{% url 'smartphones' %}">Smartphones</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="{% url 'accessories' %}">Accessories</a></li>
+            <li><a class="dropdown-item" href="{% url 'smartwatches' %}">Smartwatches</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'headphones' %}">Headphones</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'earbuds' %}">Earbuds</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>

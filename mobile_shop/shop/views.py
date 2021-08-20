@@ -19,15 +19,32 @@ def index(request):
     return render(request, "shop/index.html")
 
 
-def phones(request):
-	mobilephones = MobilePhone.objects.all()
-	context = {'phones': mobilephones}
-	return render(request, "shop/phones.html", context)
+def smartphones(request):
+	smartphones = Smartphone.objects.all()
+	context = {'smartphones': smartphones}
+	return render(request, "shop/smartphones.html", context)
 
 
+def smartwatches(request):
+	smartwatches = Smartwatch.objects.all()
+	context = {'smartwatches': smartwatches}
+	return render(request, "shop/smartwatches.html", context)
 
-def accessories(request):
-    return render(request, "shop/accessories.html")
+
+def headphones(request):
+	headphones = Headphones.objects.all()
+	context = {'headphones': headphones}
+	return render(request, "shop/headphones.html", context)
+
+
+def earbuds(request):
+	earbuds = Earbuds.objects.all()
+	context = {'earbuds': earbuds}
+	return render(request, "shop/earbuds.html", context)
+
+
+def product_detail(request, smartwatch_slug):
+    return render(request, "shop/product_detail.html")
 
 
 def guide(request):
