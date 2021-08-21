@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import *
 
@@ -19,32 +19,40 @@ def index(request):
     return render(request, "shop/index.html")
 
 
-def smartphones(request):
-	smartphones = Smartphone.objects.all()
-	context = {'smartphones': smartphones}
-	return render(request, "shop/smartphones.html", context)
+def products(request, category_slug=None):
+	categories = None
+	products = None
+
+	if category_slug != None:
+		categories = get_object_or_404(Category, slug=category_slug)
+		products = Product.objects.filter(category=categories)
+	else:
+		products = Product.objects.all()
+	
+	context = {'products': products}
+	return render(request, "shop/products.html", context)
 
 
-def smartwatches(request):
-	smartwatches = Smartwatch.objects.all()
-	context = {'smartwatches': smartwatches}
-	return render(request, "shop/smartwatches.html", context)
+# def product_detail(request, smartwatch_slug):
+# 	try:
+# 		single_product = Smartwatch.objects.get(slug=smartwatch_slug)
+# 	except Exception as e:
+# 		raise e
+# 	context = {
+# 		'single_product': single_product
+# 	}
+# 	return render(request, "shop/product_detail.html", context)
 
 
-def headphones(request):
-	headphones = Headphones.objects.all()
-	context = {'headphones': headphones}
-	return render(request, "shop/headphones.html", context)
-
-
-def earbuds(request):
-	earbuds = Earbuds.objects.all()
-	context = {'earbuds': earbuds}
-	return render(request, "shop/earbuds.html", context)
-
-
-def product_detail(request, smartwatch_slug):
-    return render(request, "shop/product_detail.html")
+def search(request):
+	if 'keyword' in request.GET:
+		keyword = request.GET['keyword']
+		if keyword:
+			products = Product.objects.filter(name__icontains=keyword)
+	context = {
+		'products': products,
+	}
+	return render(request, 'shop/products.html', context)
 
 
 def guide(request):

@@ -4,7 +4,6 @@ Product detail
 {% endblock page_title %}
 
 {% block content %}
-<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
@@ -27,7 +26,7 @@ Product detail
 			<div class="row">
 				<div class="col-md-6">
 					<div class="item">
-						<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" width="100%"/>
+						<img src="{{single_product.thumbnail}}" width="100%"/>
 					</div>
 					<!-- <div id="slider" class="owl-carousel product-slider">
 						<div class="item">
@@ -79,7 +78,7 @@ Product detail
 	        	<div class="col-md-6">
 	        		<div class="product-dtl">
         				<div class="product-info">
-		        			<div class="product-name">Variable Product</div>
+		        			<div class="product-name">{{single_product.brand}} {{single_product.model}}</div>
 		        			<div class="reviews-counter">
 								<div class="rate">
 								    <input type="radio" id="star5" name="rate" value="5" checked />

@@ -1,10 +1,37 @@
 from django.db import models
+from django.urls import reverse
 
 
-class Smartphone(models.Model):
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
+    
+    def get_url(self):
+        return reverse('products_by_category', args=[self.slug])
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Product(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     thumbnail = models.CharField(max_length=200)
+    price = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    # def get_url(self):
+    #     return reverse('product_detail', args=[self.slug])
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Smartphone(Product):
     internal_memory = models.CharField(max_length=50)
     memory_card_support = models.CharField(max_length=50)
     ram = models.CharField(max_length=50)
@@ -31,51 +58,24 @@ class Smartphone(models.Model):
     battery = models.CharField(max_length=50)
     nfc = models.CharField(max_length=50)
     usb_type = models.CharField(max_length=50)
-    price = models.CharField(max_length=50)
     description = models.TextField(blank=True)
 
-    # network_speed = models.CharField(max_length=50)
-    # screen_size = models.CharField(max_length=50)
-    # camera = models.CharField(max_length=100)
-    # operating_system = models.CharField(max_length=50)
-    # processor = models.CharField(max_length=50)
-    # battery_life = models.CharField(max_length=50)
-    # memory = models.CharField(max_length=50)
-    # ram = models.CharField(max_length=50)
-    # price = models.DecimalField(max_digits=6, decimal_places=2)
 
-    def __str__(self) -> str:
-        return self.name
-
-
-class Smartwatch(models.Model):
-    brand = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    thumbnail = models.CharField(max_length=200)
+class Smartwatch(Product):
     processor = models.CharField(max_length=50)
     operating_system = models.CharField(max_length=50)
     display = models.CharField(max_length=50)
     memory = models.CharField(max_length=50)
     battery = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
         verbose_name = "Smartwatch"
         verbose_name_plural = "Smartwatches"
 
-    def __str__(self) -> str:
-        return self.brand + " " + self.model
 
-
-class Headphones(models.Model):
-    brand = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    thumbnail = models.CharField(max_length=200)
+class Headphones(Product):
     battery_life = models.CharField(max_length=50)
     bluetooth_version = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
     NOISE_CHOICES = (
         ("NO", "No"),
         ("YES", "Yes")
@@ -86,19 +86,11 @@ class Headphones(models.Model):
         verbose_name = "Headphones"
         verbose_name_plural = "Headphones"
 
-    def __str__(self) -> str:
-        return self.brand + " " + self.model
 
-
-class Earbuds(models.Model):
-    brand = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    thumbnail = models.CharField(max_length=200)
+class Earbuds(Product):
     battery_life = models.CharField(max_length=50)
     battery_life_with_case = models.CharField(max_length=50)
     bluetooth_version = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
     NOISE_CHOICES = (
         ("NO", "No"),
         ("YES", "Yes")
@@ -109,6 +101,4 @@ class Earbuds(models.Model):
         verbose_name = "Earbuds"
         verbose_name_plural = "Earbuds"
 
-    def __str__(self) -> str:
-        return self.brand + " " + self.model
 

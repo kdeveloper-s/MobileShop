@@ -1,24 +1,18 @@
 from django.contrib import admin
-from .models import Smartphone, Smartwatch, Headphones, Earbuds
+from .models import Category, Smartphone, Smartwatch, Headphones, Earbuds
 
 
-class SmartphoneAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-class SmartwatchAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('brand','model',)}
+class ProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
 
 
-class HeadphonesAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('brand','model',)}
-
-
-class EarbudsAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('brand','model',)}
-
-admin.site.register(Smartphone, SmartphoneAdmin)
-admin.site.register(Smartwatch, SmartwatchAdmin)
-admin.site.register(Headphones, HeadphonesAdmin)
-admin.site.register(Earbuds, EarbudsAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Smartphone, ProductAdmin)
+admin.site.register(Smartwatch, ProductAdmin)
+admin.site.register(Headphones, ProductAdmin)
+admin.site.register(Earbuds, ProductAdmin)
 
