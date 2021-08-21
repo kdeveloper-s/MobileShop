@@ -16,17 +16,16 @@
             Shop
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'phones' %}">Mobile Phones</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="{% url 'accessories' %}">Accessories</a></li>
+            <li><a class="dropdown-item" href="{% url 'products' %}">All products</a></li>
+            {% for category in links %}
+            <li><a class="dropdown-item" href="{{ category.get_url }}">{{ category.name }}</a></li>
+            {% endfor %}
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <form class="d-flex" action="{% url 'search' %}" method='GET'>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
 
