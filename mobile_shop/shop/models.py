@@ -24,8 +24,8 @@ class Product(models.Model):
     price = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-    # def get_url(self):
-    #     return reverse('product_detail', args=[self.slug])
+    def get_url(self):
+        return reverse('product_detail', args=[self.category.slug, self.slug])
 
     def __str__(self) -> str:
         return self.name
