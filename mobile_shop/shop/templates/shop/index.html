@@ -1,0 +1,19 @@
+
+{% extends 'base.html' %}
+
+
+{% block page_title %}
+Home
+{% endblock page_title %}
+
+{% block content %}
+<!-- <h3 style="color: red">Home page!</h3> -->
+
+{% if user.is_authenticated %}
+
+{% endif %}
+
+{% include 'main_page.html' %}
+
+{% endblock content %}
+

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block page_title %}
+Products
+{% endblock page_title %}
+
+{% block content %}
+<html lang="en">
+  <body>
+    <main>
+      <div class="album py-5 bg-light">
+        <div class="container">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% if products %}
+            {% for product in products %}
+            <div class="col">
+              <div class="card shadow-sm">
+                <img class="thumbnail" src="{{product.thumbnail}}">
+                <div class="card-body">
+                  {% comment %} <h6><strong>{{product.name}}</strong></h6> {% endcomment %}
+                  <a href="{{product.get_url}}" class="title"><strong>{{ product.name }}<strong></a>
+                  <hr>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
+                      <a href="{{product.get_url}}"> <button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
+                    </div>
+                    <h4><strong>{{product.price}} €</strong></h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div>
+              <h2>No results found. :(</h2>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+{% endblock content %}
