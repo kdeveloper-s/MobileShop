@@ -1,3 +1,5 @@
+from django.db.models.fields import NullBooleanField
+from django.db.models.query import EmptyQuerySet
 from django.shortcuts import get_object_or_404, render, redirect
 
 from .models import *
@@ -49,9 +51,9 @@ def search(request):
 		keyword = request.GET['keyword']
 		if keyword:
 			products = Product.objects.filter(name__icontains=keyword)
-	context = {
-		'products': products,
-	}
+		context = {
+			'products': products,
+		}
 	return render(request, 'shop/products.html', context)
 
 
