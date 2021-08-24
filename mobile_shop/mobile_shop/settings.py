@@ -73,7 +73,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             'templates',
-            'templates.password'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
