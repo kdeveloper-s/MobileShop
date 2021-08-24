@@ -7,10 +7,11 @@ urlpatterns = [
     path('category/<slug:category_slug>/', views.products, name='products_by_category'),
     path('category/<slug:category_slug>/<slug:product_slug>/', views.product_detail, name='product_detail'),
     path('products/search/', views.search, name='search'),
-    path('guide', views.guide, name='guide'),
-    path('cart', views.cart, name='cart'),
-    path('register', views.register_request, name='register'),
-    path('login', views.login_request, name='login'),
-    path('logout', views.logout_request, name="logout"),
-    path("password_reset", views.password_reset_request, name="password_reset"),
+    path('guide/', views.guide, name='guide'),
+    path('cart/', views.cart, name='cart'),
+    path('register/', views.register_request, name='register'),
+    path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name='logout'),
+    path('password_reset/', views.password_reset_request, name='password_reset'),
+    path('password_reset_done/', views.password_reset_done, name='password_reset_done')
 ]
