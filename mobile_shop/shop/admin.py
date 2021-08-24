@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Smartphone, Smartwatch, Headphones, Earbuds
+from .models import Category, Smartphone, Smartwatch, Headphones, Earbuds, Cart, CartItem
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -15,4 +15,5 @@ admin.site.register(Smartphone, ProductAdmin)
 admin.site.register(Smartwatch, ProductAdmin)
 admin.site.register(Headphones, ProductAdmin)
 admin.site.register(Earbuds, ProductAdmin)
-
+admin.site.register(Cart)
+admin.site.register(CartItem)
