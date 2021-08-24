@@ -132,10 +132,11 @@ def password_reset_request(request):
 						send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
 					except BadHeaderError:
 						return HttpResponse('Invalid header found.')
-					return redirect ("/password_reset_done.html")
+					return redirect ("/password_reset_done")
 	password_reset_form = PasswordResetForm()
 	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
 
 def password_reset_done(request):
+	print(f'Request::: {request}')
 	return render(request=request, template_name="password/password_reset_done.html")
 	# return HttpResponse('Password reset link sent!')
