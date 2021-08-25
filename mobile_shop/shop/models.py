@@ -22,7 +22,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     thumbnail = models.CharField(max_length=200)
-    price = models.CharField(max_length=50)
+    price = models.IntegerField()
     description = models.TextField(blank=True)
 
     def get_url(self):

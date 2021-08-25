@@ -1,5 +1,6 @@
 from django.core import paginator
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Count
 from django.db.models.fields import NullBooleanField
 from django.db.models.query import EmptyQuerySet
 from django.shortcuts import get_object_or_404, render, redirect
@@ -21,7 +22,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 def home(request):
-    return render(request, "home.html")
+	products = Product.objects.order_by('price')[:8]
+
+	context = {
+		'products': products,
+	}
+	return render(request, "home.html", context)
 
 
 def products(request, category_slug=None):
