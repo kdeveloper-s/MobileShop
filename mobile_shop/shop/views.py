@@ -44,10 +44,12 @@ def products(request, category_slug=None):
 def product_detail(request, category_slug, product_slug):
 	try:
 		single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+		in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
 	except Exception as e:
 		raise e
 	context = {
-		'single_product': single_product
+		'single_product': single_product,
+		'in_cart': in_cart,
 	}
 	return render(request, "shop/product_detail.html", context)
 
@@ -96,6 +98,26 @@ def add_cart(request, product_id):
 	return redirect('cart')
 
 
+def remove_cart(request, product_id):
+	cart = Cart.objects.get(cart_id=_cart_id(request))
+	product = get_object_or_404(Product, id=product_id)
+	cart_item = CartItem.objects.get(product=product, cart=cart)
+	if cart_item.quantity > 1:
+		cart_item.quantity -= 1
+		cart_item.save()
+	else:
+		cart_item.delete()
+	return redirect('cart')
+
+
+def remove_cart_item(request, product_id):
+	cart = Cart.objects.get(cart_id=_cart_id(request))
+	product = get_object_or_404(Product, id=product_id)
+	cart_item = CartItem.objects.get(product=product, cart=cart)
+	cart_item.delete()
+	return redirect('cart')
+
+
 def cart(request, total=0, quantity=0, cart_items=None):
 	try:
 		cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -103,6 +125,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
 		for cart_item in cart_items:
 			total += (int(float(cart_item.product.price)) * cart_item.quantity)
 			quantity += cart_item.quantity
+		shipping = 9.99
+		grand_total = total + shipping
 	except ObjectDoesNotExist:
 		pass
 
@@ -110,6 +134,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
 		'total': total,
 		'quantity': quantity,
 		'cart_items': cart_items,
+		'shipping': shipping,
+		'grand_total': grand_total,
 	}
 	return render(request, "shop/cart.html", context)
 
