@@ -6,8 +6,8 @@
 
 {% comment %} WELCOME SCREEN START {% endcomment %}
 
-<main class="bg-light">
-    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="max-width:100%">
+<main class="bg-white">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-white" style="max-width:100%">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
 
             {% if user.is_authenticated %}
@@ -16,48 +16,50 @@
             <h1 class="display-4 fw-normal">Hello Guest</h1>
             {% endif %}
 
-            
-            <p class="lead fw-normal">Don't know what device to choose? Read our smartphone Buying Guide - How to buy the best mobile phone.</p>
+
+            <p class="lead fw-normal">Don't know what device to choose? Read our smartphone Buying Guide - How to buy
+                the best mobile phone.</p>
             <a class="btn btn-outline-secondary" href="{% url 'guide' %}">Read the guide</a>
         </div>
         <div class="product-device shadow-sm d-none d-md-block"></div>
         <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
 
-        <div class="bg-light" >
-            <ul style="list-style:none; padding-left: 0;">
-                <li>
-                    <div style="float:left; width: 50%" >
-                        <div class="me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden">
-                            <div class="my-3 py-3">
-                                <h2 class="display-5" style="color: black">Smartphones</h2>
-                                <div>
-                                    <a class="btn btn-outline-secondary" style="margin-top: 2rem; margin-bottom: 1rem;" href="#">Shop</a>
-                                    <img src="../static/1.png">
-                                    
-                                </div>
+        <div class="bg-white">
 
-                            </div>
-                            
-                        </div>
-    
-                    </div>
-                </li>
-                <li>
-                    <div style="">
-                        <div class="bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-                            <div class="my-3 p-3">
-                            <h2 class="display-5">Accessories</h2>
-                            
-                            <div>
-                                <a class="btn btn-outline-secondary" style="margin-top: 2rem; margin-bottom: 1rem;" href="#">Shop</a>
-                                <img src="../static/2.png">
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-    
-                </li>
-            </ul>
+
+
+            <table>
+                <tr>
+                    <table style="width:100%">
+                        <tr>
+                            <th><h1>Smartphones</h1></th>
+                            <th><h1>Smartwatches</h1></th>
+                        </tr>
+                        <tr>
+                            <td><img src="../static/1_smartphone.png"></td>
+                            <td><img src="../static/2_smartwatch.png"></td>
+                        </tr>
+                    </table>
+                </tr>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <tr>
+                    <table style="width:100%">
+                        <tr>
+                            <th><h1>Headphones</h1></th>
+                            <th><h1>Earbuds</h1></th>
+                        </tr>
+                        <tr>
+                            <td><img src="../static/3_headphones.png"></td>
+                            <td><img src="../static/4_earbuds.png"></td>
+                        </tr>
+                    </table>
+                </tr>
+            </table>
+
         </div>
 
     </div>
@@ -68,29 +70,29 @@
 
 <!-- ========================= SECTION  ========================= -->
 <section class="section-name padding-y-sm">
-<div class="container">
+    <div class="container">
 
-<header class="section-heading">
-	<a href="{% url 'products' %}" class="btn btn-outline-primary float-right">See all</a>
-	<h3 class="section-title">Popular products</h3>
-</header><!-- sect-heading -->
+        <header class="section-heading">
+            <a href="{% url 'products' %}" class="btn btn-outline-primary float-right">See all</a>
+            <h3 class="section-title">Popular products</h3>
+        </header><!-- sect-heading -->
 
-	
-<div class="row">
 
-	<div class="col-md-3">
-		<div class="card card-product-grid">
-			<a href="./product-detail.html" class="img-wrap"> <img src="images/items/1.jpg"> </a>
-			<figcaption class="info-wrap">
-				<a href="./product-detail.html" class="title">Just another product name</a>
-				<div class="price mt-1">$179.00</div> <!-- price-wrap.// -->
-			</figcaption>
-		</div>
-	</div> <!-- col.// -->
+        <div class="row">
 
-</div> <!-- row.// -->
+            <div class="col-md-3">
+                <div class="card card-product-grid">
+                    <a href="./product-detail.html" class="img-wrap"> <img src="images/items/1.jpg"> </a>
+                    <figcaption class="info-wrap">
+                        <a href="./product-detail.html" class="title">Just another product name</a>
+                        <div class="price mt-1">$179.00</div> <!-- price-wrap.// -->
+                    </figcaption>
+                </div>
+            </div> <!-- col.// -->
 
-</div><!-- container // -->
+        </div> <!-- row.// -->
+
+    </div><!-- container // -->
 </section>
 <!-- ========================= SECTION  END// ========================= -->
 
