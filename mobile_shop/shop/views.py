@@ -1,7 +1,9 @@
+from django.core import paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.fields import NullBooleanField
 from django.db.models.query import EmptyQuerySet
 from django.shortcuts import get_object_or_404, render, redirect
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from .models import *
 
@@ -29,13 +31,19 @@ def products(request, category_slug=None):
 	if category_slug != None:
 		categories = get_object_or_404(Category, slug=category_slug)
 		products = Product.objects.filter(category=categories)
+		paginator = Paginator(products, 21)
+		page = request.GET.get('page')
+		paged_products = paginator.get_page(page)
 		product_count = products.count()
 	else:
 		products = Product.objects.all()
+		paginator = Paginator(products, 21)
+		page = request.GET.get('page')
+		paged_products = paginator.get_page(page)
 		product_count = products.count()
 	
 	context = {
-		'products': products,
+		'products': paged_products,
 		'product_count': product_count,
 	}
 	return render(request, "shop/products.html", context)
@@ -120,16 +128,17 @@ def remove_cart_item(request, product_id):
 
 def cart(request, total=0, quantity=0, cart_items=None):
 	try:
+		shipping = 0
+		grand_total = 0
 		cart = Cart.objects.get(cart_id=_cart_id(request))
 		cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 		for cart_item in cart_items:
 			total += (int(float(cart_item.product.price)) * cart_item.quantity)
 			quantity += cart_item.quantity
+		shipping = 9.99
+		grand_total = total + shipping
 	except ObjectDoesNotExist:
 		pass
-
-	shipping = 9.99
-	grand_total = total + shipping
 
 	context = {
 		'total': total,
