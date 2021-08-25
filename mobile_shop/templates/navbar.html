@@ -1,90 +1,82 @@
-<!-- Navigation-->
-<div class="container px-4 px-lg-5 bg-light" style="max-width: 100%; min-width: 70%;">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="display: table; width: 100%">
+{% load static %}
+
+<header class="section-header">
+<nav class="navbar p-md-0 navbar-expand-sm navbar-light border-bottom">
+<div class="container">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop4" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTop4">
+    <ul class="navbar-nav mr-auto">
+    	<li class="nav-item dropdown">
+		 	<a href="#" class="nav-link">   English </a>
+		    
+		</li>
+		<li class="nav-item dropdown">
+			<a href="#" class="nav-link"> USD </a>
+		</li>
+    </ul>
+    <ul class="navbar-nav">
+		<li><a href="#" class="nav-link"> <i class="fa fa-envelope"></i> Email </a></li>
+		<li><a href="#" class="nav-link"> <i class="fa fa-phone"></i> Call us </a></li>
+	</ul> <!-- list-inline //  -->
+  </div> <!-- navbar-collapse .// -->
+</div> <!-- container //  -->
+</nav>
 
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-        class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4" style="align-items: center;">
-        <li><a class="navbar-brand" href="{% url 'index' %}"><img src="../static/mobileshop.png" width="150px"></a></li>
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            Shop
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'products' %}">All products</a></li>
-            {% for category in links %}
-            <li><a class="dropdown-item" href="{{ category.get_url }}">{{ category.name }}</a></li>
-            {% endfor %}
-          </ul>
-        </li>
-        <li class="nav-item"><a class="nav-link active" href="{% url 'guide' %}">Guide</a></li>
-      </ul>
-      <!-- Search -->
-      <form class="d-flex" action="{% url 'search' %}" method='GET'>
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword" required="required">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-      <!-- Search -->
 
-      <form class="d-flex" action="{% url 'cart' %}">
-        <div style="margin: auto; padding: 10px">
-          <button class="btn btn-outline-dark" type="submit">
-            <img src="../static/shopping-cart.svg" width="25px">
-            Cart
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-          </button>
-        </div>
-      </form>
+<section class="header-main border-bottom">
+	<div class="container">
+<div class="row align-items-center">
+	<div class="col-lg-2 col-md-3 col-6">
+		<a href="{% url 'home' %}" class="brand-wrap">
+			<img class="logo" src="{% static 'images/logo.png' %}" width=100%>
+		</a> <!-- brand-wrap.// -->
+	</div>
+	<div class="col-lg col-sm col-md col-6 flex-grow-0">
+		<div class="category-wrap dropdown d-inline-block float-right">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
+				<i class="fa fa-bars"></i> All category 
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="{% url 'products' %}">All products</a>
+				{% for category in links %}
+				<a class="dropdown-item" href="{{ category.get_url }}">{{ category.name }}</a>
+				{% endfor %}
+			</div>
+		</div>  <!-- category-wrap.// -->
+	</div> <!-- col.// -->
+	<a href="{% url 'guide' %}" class="btn btn-outline-primary">Guide</a>
+	<div class="col-lg  col-md-6 col-sm-12 col">
+		<form action="{% url 'search' %}" class="search" method='GET'>
+			<div class="input-group w-100">
+			    <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword" required="required">
+			    <div class="input-group-append">
+			      <button class="btn btn-primary" type="submit">
+			        <i class="fa fa-search"></i>
+			      </button>
+			    </div>
+		    </div>
+		</form> <!-- search-wrap .end// -->
+	</div> <!-- col.// -->
+	<div class="col-lg-3 col-sm-6 col-8 order-2 order-lg-3">
+				<div class="d-flex justify-content-end mb-3 mb-lg-0">
+					<div class="widget-header">
+						<small class="title text-muted">Welcome guest!</small>
+						<div> 
+							<a href="./signin.html">Sign in</a> <span class="dark-transp"> | </span>
+							<a href="./register.html"> Register</a>
+						</div>
+					</div>
+					<a href="{% url 'cart' %}" class="widget-header pl-3 ml-3">
+						<div class="icon icon-sm rounded-circle border"><i class="fa fa-shopping-cart"></i></div>
+						<span class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
+					</a>
+				</div> <!-- widgets-wrap.// -->
+			</div> <!-- col.// -->
+        </div> <!-- row.// -->
+	</div> <!-- container.// -->
+</section> <!-- header-main .// -->
+</header> <!-- section-header.// -->
 
-      <form class="d-flex">
-        <div style="margin: auto; padding: 10px; align-items: center">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-            <li class="nav-item dropdown">
-
-
-              {% if user.is_authenticated %}
-
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <img src="../static/avatar.svg" width="25px">
-                {{ user.get_username }}
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="">Account</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Sign Out</a></li>
-              </ul>
-
-              {% else %}
-
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <img src="../static/avatar.svg" width="25px">
-                Sign In
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
-              </ul>
-
-              {% endif %}
-
-
-            </li>
-          </ul>
-        </div>
-      </form>
-
-    </div>
-  </nav>
-</div>
