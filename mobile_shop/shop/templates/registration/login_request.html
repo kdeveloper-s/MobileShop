@@ -4,6 +4,8 @@
 
 {% load crispy_forms_tags %}
 
+{% if request.user.is_authenticated == False%}
+
 <!--Login-->
 <div class="container py-5" style="max-width: 55%; min-width: 55%;">
   <h1>Login</h1>
@@ -21,6 +23,12 @@
 
     </div>
 
+    {% comment %} <p>{{  }}</p> {% endcomment %}
+    {% comment %} {% if request.user.is_authenticated == False%} {% endcomment %}
+
+    {{messages.0}}
+
+    <br/>
 
   </form>
   <p class="text-center">Don't have an account?</p>
@@ -28,5 +36,13 @@
   <p class="text-center">Forgot password?</p>
   <p class="text-center"><a href="{% url 'password_reset' %}">Reset password</a></p>
 </div>
+
+{% else  %}
+
+<div align="center" style="margin-top: 30px; margin-bottom: 30px;">
+<h1>You are already logged in!</h1>
+</div>
+
+{% endif %}
 
 {% endblock %}
