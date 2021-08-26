@@ -34,20 +34,19 @@
 			<img class="logo" src="{% static 'images/logo.png' %}" width=100%>
 		</a> <!-- brand-wrap.// -->
 	</div>
+	<a href="{% url 'products' %}" class="btn btn-primary">All products</a>
 	<div class="col-lg col-sm col-md col-6 flex-grow-0">
 		<div class="category-wrap dropdown d-inline-block float-right">
 			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
-				<i class="fa fa-bars"></i> All category 
+				<i class="fa fa-bars"></i> Categories
 			</button>
 			<div class="dropdown-menu">
-				<a class="dropdown-item" href="{% url 'products' %}">All products</a>
 				{% for category in links %}
 				<a class="dropdown-item" href="{{ category.get_url }}">{{ category.name }}</a>
 				{% endfor %}
 			</div>
 		</div>  <!-- category-wrap.// -->
 	</div> <!-- col.// -->
-	<a href="{% url 'guide' %}" class="btn btn-outline-primary">Guide</a>
 	<div class="col-lg  col-md-6 col-sm-12 col">
 		<form action="{% url 'search' %}" class="search" method='GET'>
 			<div class="input-group w-100">

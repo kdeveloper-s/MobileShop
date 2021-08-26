@@ -12,10 +12,10 @@ urlpatterns = [
     path('add_cart/<int:product_id>/', views.add_cart, name='add_cart'),
     path('remove_cart/<int:product_id>/', views.remove_cart, name='remove_cart'),
     path('remove_cart_item/<int:product_id>/', views.remove_cart_item, name='remove_cart_item'),
+    path('checkout/', views.checkout, name='checkout'),
     path('register/', views.register_request, name='register'),
     path('login/', views.login_request, name='login'),
     path('logout/', views.logout_request, name="logout"),
     path("password_reset/", views.password_reset_request, name="password_reset"),
-    path('password_reset_done/', views.password_reset_done, name='password_reset_done')
-
+    path('password_reset_done/', views.password_reset_done, name='password_reset_done'),
 ]

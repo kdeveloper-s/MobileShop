@@ -26,46 +26,31 @@
 
 <p>{{ single_product.description }}</p>
 
-
+{% if 'smartphones' in request.path %}
 <hr>
-	<div class="row">
-		<div class="item-option-select">
-			<h6>Choose Color</h6>
+<div class="row">
+	<div class="item-option-select">
+			<h6>Choose internal memory</h6>
 			<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color"> Silver
-			  </label>
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color" > Gray
-			  </label>
-			  <label class="btn btn-light active">
-			    <input type="radio" name="radio_color checked"> Gold
-			  </label>
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color"> Black
-			  </label>
-			</div> 
-		</div>
-	</div> <!-- row.// -->
-	<div class="row">
-		<div class="item-option-select">
-			<h6>Select Size</h6>
-			<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color"> S
-			  </label>
-			  <label class="btn btn-light active">
-			    <input type="radio" name="radio_color" checked> M
-			  </label>
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color"> L
-			  </label>
-			  <label class="btn btn-light">
-			    <input type="radio" name="radio_color"> XL
-			  </label>
-			</div> 
-		</div>
-	</div> <!-- row.// -->
+				<label class="btn btn-light">
+					<input type="radio" name="radio_color"> {{ single_product.smartphone.internal_memory }}
+				</label>
+			</div>
+	</div>
+</div> <!-- row.// -->
+
+<div class="row">
+	<div class="item-option-select">
+		<h6>Choose RAM</h6>
+		<div class="btn-group btn-group-sm btn-group-toggle" data-toggle="buttons">
+			<label class="btn btn-light">
+				<input type="radio" name="radio_color"> {{ single_product.smartphone.ram }}
+			</label>
+		</div> 
+	</div>
+</div> <!-- row.// -->
+{% endif %}
+
 	<hr>
 	{% if in_cart %}
 		<a href="#" class="btn btn-success"> <span class="text">Added to Cart</span><i class="fas fa-check"></i></a>
@@ -85,7 +70,7 @@
 			<div class="col-md-9">
 
 	<header class="section-heading">
-		<h3>Customer Reviews </h3>  
+		<h3>Specifications</h3>  
 		
 	</header>
 
