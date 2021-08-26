@@ -7,22 +7,32 @@
 {% comment %} WELCOME SCREEN START {% endcomment %}
 
 <main class="bg-white">
+
     <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-white" style="max-width:100%">
-        <div class="col-md-5 p-lg-5 mx-auto my-5">
 
-            {% if user.is_authenticated %}
-            <h1 class="display-4 fw-normal">Hi, {{ user.get_username|title }} &#128522;</h1>
-            {% else %}
-            <h1 class="display-4 fw-normal">Hello Guest</h1>
-            {% endif %}
+        {% if user.is_authenticated %}
+        <h1 class="display-4 fw-normal">Hi, {{ user.get_username|title }} &#128522;</h1>
+        {% else %}
+        <h1 class="display-4 fw-normal">Hello Guest</h1>
+        {% endif %}
+        
+        <div class="col-md-12 p-lg-5 mx-auto my-5">
+            <div class="image">
+                <img class="image__img" src="../static/images/guide_cover.png" alt="Smartphones" width="100%">
+                
+                <div class="image__overlay .image__overlay--blur">
+                    <p class="lead fw-normal" style="margin: 2rem 0 2rem 0;">Don't know what device to choose? Read our smartphone Buying Guide - How to
+                        buy
+                        the best mobile phone.</p>
+                    <a href="{% url 'guide' %}"><button type="button" class="btn btn-primary"
+                            style="padding: 6px 12px; background-image: linear-gradient(to left, rgba(255,0,0,0), rgba(255,0,0,1));">
+                            <h3>Read Now</h3>
+                        </button></a>
+                </div>
+            </div>
 
-
-            <p class="lead fw-normal">Don't know what device to choose? Read our smartphone Buying Guide - How to buy
-                the best mobile phone.</p>
-            <a class="btn btn-outline-secondary" href="{% url 'guide' %}">Read the guide</a>
         </div>
-        <div class="product-device shadow-sm d-none d-md-block"></div>
-        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+
 
         <div class="bg-white">
 
@@ -44,7 +54,10 @@
                                 <div class="image">
                                     <img class="image__img" src="../static/1_smartphone.png" alt="Smartphones">
                                     <div class="image__overlay .image__overlay--blur">
-                                        <a href="{{ links.0.get_url }}"><button type="button" class="btn btn-primary" style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));"><h3>Shop Now</h3></button></a>
+                                        <a href="{{ links.0.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h3>Shop Now</h3>
+                                            </button></a>
                                     </div>
                                 </div>
 
@@ -53,7 +66,10 @@
                                 <div class="image">
                                     <img class="image__img" src="../static/2_smartwatch.png" alt="Smartwatch">
                                     <div class="image__overlay .image__overlay--blur">
-                                        <a href="{{ links.1.get_url }}"><button type="button" class="btn btn-primary" style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));"><h3>Shop Now</h3></button></a>
+                                        <a href="{{ links.1.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h3>Shop Now</h3>
+                                            </button></a>
                                     </div>
                                 </div>
                             </td>
@@ -80,7 +96,10 @@
                                 <div class="image">
                                     <img class="image__img" src="../static/3_headphones.png" alt="Headphones">
                                     <div class="image__overlay .image__overlay--blur">
-                                        <a href="{{ links.2.get_url }}"><button type="button" class="btn btn-primary" style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));"><h3>Shop Now</h3></button></a>
+                                        <a href="{{ links.2.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h3>Shop Now</h3>
+                                            </button></a>
                                     </div>
                                 </div>
                             </td>
@@ -88,7 +107,10 @@
                                 <div class="image">
                                     <img class="image__img" src="../static/4_earbuds.png" alt="Earbuds">
                                     <div class="image__overlay .image__overlay--blur">
-                                        <a href="{{ links.3.get_url }}"><button type="button" class="btn btn-primary" style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));"><h3>Shop Now</h3></button></a>
+                                        <a href="{{ links.3.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 12px 24px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h3>Shop Now</h3>
+                                            </button></a>
                                     </div>
                                 </div>
                             </td>
