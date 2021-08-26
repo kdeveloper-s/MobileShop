@@ -7,7 +7,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'category')
     prepopulated_fields = {'slug': ('name',)}
+
+
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('product', 'quantity')
 
 
 admin.site.register(Category, CategoryAdmin)
@@ -16,4 +21,4 @@ admin.site.register(Smartwatch, ProductAdmin)
 admin.site.register(Headphones, ProductAdmin)
 admin.site.register(Earbuds, ProductAdmin)
 admin.site.register(Cart)
-admin.site.register(CartItem)
+admin.site.register(CartItem, CartItemAdmin)

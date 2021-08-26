@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -13,7 +14,7 @@ class Category(models.Model):
     def get_url(self):
         return reverse('products_by_category', args=[self.slug])
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -22,13 +23,13 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     thumbnail = models.CharField(max_length=200)
-    price = models.CharField(max_length=50)
+    price = models.IntegerField()
     description = models.TextField(blank=True)
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -62,8 +63,8 @@ class Smartwatch(Product):
     battery = models.CharField(max_length=50)
 
     class Meta:
-        verbose_name = "Smartwatch"
-        verbose_name_plural = "Smartwatches"
+        verbose_name = "smartwatch"
+        verbose_name_plural = "smartwatches"
 
 
 class Headphones(Product):
@@ -76,8 +77,8 @@ class Headphones(Product):
     noise_cancelling = models.CharField(max_length=3, choices=NOISE_CHOICES, default="NO")
 
     class Meta:
-        verbose_name = "Headphones"
-        verbose_name_plural = "Headphones"
+        verbose_name = "headphones"
+        verbose_name_plural = "headphones"
 
 
 class Earbuds(Product):
@@ -91,8 +92,8 @@ class Earbuds(Product):
     noise_cancelling = models.CharField(max_length=3, choices=NOISE_CHOICES, default="NO")
 
     class Meta:
-        verbose_name = "Earbuds"
-        verbose_name_plural = "Earbuds"
+        verbose_name = "earbuds"
+        verbose_name_plural = "earbuds"
 
 
 class Cart(models.Model):
@@ -104,13 +105,14 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField()
     is_active = models.BooleanField(default=True)
 
     def sub_total(self):
-        return int(float(self.product.price)) * self.quantity
+        return round(float(self.product.price), 2) * self.quantity
 
-    def __str__(self):
+    def __unicode__(self):
         return self.product

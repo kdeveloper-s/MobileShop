@@ -1,7 +1,11 @@
+from django.core import paginator
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.aggregates import Count
 from django.db.models.fields import NullBooleanField
 from django.db.models.query import EmptyQuerySet
 from django.shortcuts import get_object_or_404, render, redirect
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -19,7 +23,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 def home(request):
-    return render(request, "home.html")
+	products = Product.objects.all().order_by('-price')[:8]
+
+	context = {
+		'products': products,
+	}
+	return render(request, "home.html", context)
 
 
 def products(request, category_slug=None):
@@ -29,13 +38,19 @@ def products(request, category_slug=None):
 	if category_slug != None:
 		categories = get_object_or_404(Category, slug=category_slug)
 		products = Product.objects.filter(category=categories)
+		paginator = Paginator(products, 21)
+		page = request.GET.get('page')
+		paged_products = paginator.get_page(page)
 		product_count = products.count()
 	else:
 		products = Product.objects.all()
+		paginator = Paginator(products, 21)
+		page = request.GET.get('page')
+		paged_products = paginator.get_page(page)
 		product_count = products.count()
 	
 	context = {
-		'products': products,
+		'products': paged_products,
 		'product_count': product_count,
 	}
 	return render(request, "shop/products.html", context)
@@ -120,16 +135,20 @@ def remove_cart_item(request, product_id):
 
 def cart(request, total=0, quantity=0, cart_items=None):
 	try:
-		cart = Cart.objects.get(cart_id=_cart_id(request))
-		cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+		shipping = 0
+		grand_total = 0
+		if request.user.is_authenticated:
+			cart_items = CartItem.objects.filter(user=request.user, is_active=True)
+		else:
+			cart = Cart.objects.get(cart_id=_cart_id(request))
+			cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 		for cart_item in cart_items:
 			total += (int(float(cart_item.product.price)) * cart_item.quantity)
 			quantity += cart_item.quantity
+		shipping = 9.99
+		grand_total = total + shipping
 	except ObjectDoesNotExist:
 		pass
-
-	shipping = 9.99
-	grand_total = total + shipping
 
 	context = {
 		'total': total,
@@ -139,6 +158,31 @@ def cart(request, total=0, quantity=0, cart_items=None):
 		'grand_total': grand_total,
 	}
 	return render(request, "shop/cart.html", context)
+
+
+@login_required(login_url='login')
+def checkout(request, total=0, quantity=0, cart_items=None):
+	try:
+		shipping = 0
+		grand_total = 0
+		cart = Cart.objects.get(cart_id=_cart_id(request))
+		cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+		for cart_item in cart_items:
+			total += (int(float(cart_item.product.price)) * cart_item.quantity)
+			quantity += cart_item.quantity
+		shipping = 9.99
+		grand_total = total + shipping
+	except ObjectDoesNotExist:
+		pass
+
+	context = {
+		'total': total,
+		'quantity': quantity,
+		'cart_items': cart_items,
+		'shipping': shipping,
+		'grand_total': grand_total,
+	}
+	return render(request, "shop/checkout.html", context)
 
 
 def guide(request):
@@ -183,7 +227,6 @@ def register_request(request):
 	return render(request=request, template_name="registration/register_request.html", context={"register_form": form})
 
 
-
 def login_request(request):
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
@@ -192,6 +235,16 @@ def login_request(request):
 			password = form.cleaned_data.get('password')
 			user = authenticate(username=username, password=password)
 			if user is not None:
+				try:
+					cart = Cart.objects.get(cart_id=_cart_id(request))
+					is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+					if is_cart_item_exists:
+						cart_item = CartItem.objects.filter(cart=cart)
+						for item in cart_item:
+							item.user = user
+							item.save()
+				except:
+					pass
 				login(request, user)
 				messages.info(request, f"You are now logged in as {username}.")
 				return redirect("/")
@@ -204,6 +257,7 @@ def login_request(request):
 	return render(request=request, template_name="registration/login_request.html", context={"login_form": form})
 
 
+@login_required(login_url='login')
 def logout_request(request):
 	logout(request)
 	messages.info(request, "Logged out successfully!")
