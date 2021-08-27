@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+<!-- {% extends 'base.html' %}
 
 
 {% block page_title %}
@@ -14,6 +14,7 @@ Guide
 <!-- Page content-->
 <div class="container mt-5">
     <div class="row">
+    
         <div class="col-lg-8">
             <!-- Post content-->
             <article>
@@ -214,11 +215,38 @@ Guide
 
                 </section>
             </article>
+
             <!-- Bootstrap core JS-->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
             <!-- Core theme JS-->
             <script src="js/scripts.js"></script>
 
+        </div>
+        <div class="col-lg-4" style="float: right;">
+        <br/>
+            {% for article in articles|slice:":9" %}
+                <h5 style="text-align: center;">{{ article.title }}</h5>
+                <p><i>{{ article.published }}</i></p>
+            
+                <div>
+                    <div class="image">
+                        <image class="image__img" src="{{ article.urlToImage }}" width="100%" alt="Article_img">
+                        <div class="image__overlay .image__overlay--blur">
+                            <a href="{{ article.url }}"><button type="button" class="btn btn-primary"
+                                style="padding: 6px 12px; background-image: linear-gradient(to right, rgb(20, 32, 201,0.5), rgba(255,0,0,1));">
+                                <h4>Read</h4>
+                            </button></a>
+                        </div>
+                    </div>
+                </div>
+                
+                        
+                <div style="text-align: justify; text-justify: inter-word;"><p>{{ article.description }}</p></div>
+                <br/>
+            {% endfor %}
 
+        </div>
+    </div>
+</div>
 
-            {% endblock content %}
+            {% endblock content %} -->

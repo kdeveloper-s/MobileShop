@@ -24,6 +24,9 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
+import requests
+import pandas as pd
+
 def home(request):
 	products = Product.objects.all().order_by('-price')[:8]
 
@@ -215,9 +218,38 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 	}
 	return render(request, "shop/checkout.html", context)
 
-
+# Blog
 def guide(request):
-    return render(request, "shop/guide.html")
+	API_KEY = "f9e63637b7244cf4bf5cc7501c5724e3"
+
+	params = dict(
+		q = "Smartphones",
+		sortBy="relevancy",
+		from_param="2021-08-25",
+		apiKey="f9e63637b7244cf4bf5cc7501c5724e3"
+	)
+
+	url = f"https://newsapi.org/v2/everything"
+
+	r = requests.get(url=url, params=params)
+	data = r.json()
+
+	articles_list = []
+	timestamps = []
+	for i in data['articles']:
+		date_pub = i['publishedAt']
+		timestamps.append(date_pub)
+		df = pd.DataFrame({'TIME_STAMP':timestamps})
+		df["TIME_STAMP"] = pd.to_datetime(df["TIME_STAMP"])
+		df["DATE"] = df["TIME_STAMP"].dt.date
+		formatted_dates = df["DATE"]
+		article_date = formatted_dates[data['articles'].index(i)]
+		article_date = str(article_date)
+		articles_list.append({'title': i['title'], 'description':i['description'],'url':i['url'], 'urlToImage':i['urlToImage'], 'published':article_date})
+		
+		
+	return render(request, "shop/guide.html", context={"articles" : articles_list})
+	
 
 
 def register(request):
