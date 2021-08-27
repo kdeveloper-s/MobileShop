@@ -336,7 +336,7 @@ def login_request(request):
 				except:
 					pass
 				login(request, user)
-				messages.info(request, f"You are now logged in as {username}.")
+				# messages.info(request, f"You are now logged in as {username}.")
 				url = request.META.get('HTTP_REFERER')
 				try:
 					query = requests.utils.urlparse(url).query
@@ -347,9 +347,11 @@ def login_request(request):
 				except:
 					return redirect("/")
 			else:
-				messages.error(request, "Invalid username or password.")
+				# messages.error(request, "Invalid username or password.")
+				pass
 		else:
-			messages.error(request, "Invalid username or password.")
+			# messages.error(request, "Invalid username or password.")
+			pass
 	form = AuthenticationForm()
 	return render(request=request, template_name="registration/login_request.html", context={"login_form": form})
 
