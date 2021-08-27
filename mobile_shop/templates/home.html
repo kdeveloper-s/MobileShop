@@ -7,13 +7,13 @@
 {% comment %} WELCOME SCREEN START {% endcomment %}
 
 <main class="bg-white">
-
+<div style="font-family: sans-serif;">
     <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-white" style="max-width:100%">
 
         {% if user.is_authenticated %}
-        <h1 class="display-4 fw-normal">Hi, {{ user.get_username|title }} &#128522;</h1>
+        <h1 class="display-4 fw-normal" style="font-family: sans-serif;">Hi, {{ user.get_username|title }} &#128522;</h1>
         {% else %}
-        <h1 class="display-4 fw-normal">Hello Guest</h1>
+        <h1 class="display-4 fw-normal" style="font-family: sans-serif;">Hello Guest</h1>
         {% endif %}
         
         <div class="col-md-12 p-lg-5 mx-auto my-5">
@@ -122,6 +122,7 @@
         </div>
 
     </div>
+</div>
 
 </main>
 
