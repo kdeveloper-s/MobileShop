@@ -26,6 +26,7 @@ from django.utils.encoding import force_bytes
 
 import requests
 import pandas as pd
+from django.conf import settings
 
 def home(request):
 	products = Product.objects.all().order_by('-price')[:8]
@@ -220,13 +221,12 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 
 # Blog
 def guide(request):
-	API_KEY = "f9e63637b7244cf4bf5cc7501c5724e3"
 
 	params = dict(
 		q = "Smartphones",
 		sortBy="relevancy",
 		from_param="2021-08-25",
-		apiKey="f9e63637b7244cf4bf5cc7501c5724e3"
+		apiKey=f"{settings.API_KEY}"
 	)
 
 	url = f"https://newsapi.org/v2/everything"
