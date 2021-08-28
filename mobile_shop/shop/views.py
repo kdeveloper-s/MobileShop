@@ -62,13 +62,12 @@ def products(request, category_slug=None):
 
 
 def product_detail(request, category_slug, product_slug):
-	try:
-		single_product = Product.objects.get(
-			category__slug=category_slug, slug=product_slug)
-		in_cart = CartItem.objects.filter(
-			cart__cart_id=_cart_id(request), product=single_product).exists()
-	except Exception as e:
-		raise e
+	current_user = request.user
+	single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+	if current_user.is_authenticated:
+		in_cart = CartItem.objects.filter(user=current_user, product=single_product).exists()
+	else:
+		in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
 	context = {
 		'single_product': single_product,
 		'in_cart': in_cart,
@@ -99,65 +98,64 @@ def _cart_id(request):
 def add_cart(request, product_id):
 	current_user = request.user
 	product = Product.objects.get(id=product_id)
+	category_slug = product.category.slug
+	product_slug = product.slug
 	if current_user.is_authenticated:
-		if CartItem.DoesNotExist:
+		try:
+			cart_item = CartItem.objects.get(product=product, user=current_user)
+			cart_item.quantity += 1
+			cart_item.save()
+			return redirect('cart')
+		except CartItem.DoesNotExist:
 			cart_item = CartItem.objects.create(
 				product=product,
 				quantity=1,
 				user=current_user,
 			)
-		else:
-			cart_item = CartItem.objects.get(product=product, user=current_user)
-			cart_item.quantity += 1
-		cart_item.save()
+			cart_item.save()
+			return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug,}))
 
-		return redirect('cart')
-
-	# If user is not authenticated
 	else:
-		if Cart.DoesNotExist:
+		try:
+			cart = Cart.objects.get(cart_id=_cart_id(request))
+		except Cart.DoesNotExist:
 			cart = Cart.objects.create(
 				cart_id=_cart_id(request)
 			)
-		else:
-			cart = Cart.objects.get(cart_id=_cart_id(request))
-
 		cart.save()
 
-		if CartItem.DoesNotExist:
+		try:
+			cart_item = CartItem.objects.get(product=product, cart=cart)
+			cart_item.quantity += 1
+			cart_item.save()
+			return redirect('cart')
+		except CartItem.DoesNotExist:
 			cart_item = CartItem.objects.create(
 				product=product,
 				quantity=1,
 				cart=cart,
 			)
-		else:
-			cart_item = CartItem.objects.get(product=product, cart=cart)
-			cart_item.quantity += 1
-
-		cart_item.save()
-		return redirect('cart')
+			cart_item.save()
+			return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug,}))
 
 
 def remove_cart(request, product_id):
-	product = get_object_or_404(Product, id=product_id)
-	try:
-		if request.user.is_authenticated:
-			cart_item = CartItem.objects.get(product=product, user=request.user)
-		else:
-			cart = Cart.objects.get(cart_id=_cart_id(request))
-			cart_item = CartItem.objects.get(product=product, cart=cart)
-		if cart_item.quantity > 1:
-			cart_item.quantity -= 1
-			cart_item.save()
-		else:
-			cart_item.delete()
-	except:
-		pass
+	product = Product.objects.get(id=product_id)
+	if request.user.is_authenticated:
+		cart_item = CartItem.objects.get(product=product, user=request.user)
+	else:
+		cart = Cart.objects.get(cart_id=_cart_id(request))
+		cart_item = CartItem.objects.get(product=product, cart=cart)
+	if cart_item.quantity > 1:
+		cart_item.quantity -= 1
+		cart_item.save()
+	else:
+		cart_item.delete()
 	return redirect('cart')
 
 
 def remove_cart_item(request, product_id):
-	product = get_object_or_404(Product, id=product_id)
+	product = Product.objects.get(id=product_id)
 	if request.user.is_authenticated:
 		cart_item = CartItem.objects.get(product=product, user=request.user)
 	else:
@@ -167,58 +165,46 @@ def remove_cart_item(request, product_id):
 	return redirect('cart')
 
 
-def cart(request, total=0, quantity=0, cart_items=None):
-	try:
-		shipping = 0
-		grand_total = 0
-		if request.user.is_authenticated:
-			cart_items = CartItem.objects.filter(user=request.user, is_active=True)
-		else:
-			cart = Cart.objects.get(cart_id=_cart_id(request))
-			cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-		for cart_item in cart_items:
-			total += (int(float(cart_item.product.price)) * cart_item.quantity)
-			quantity += cart_item.quantity
-		shipping = 9.99
-		grand_total = total + shipping
-	except ObjectDoesNotExist:
-		pass
+def cart_order_calc(user_is, user_obj, request_1, total, quantity, cart_items):
+	shipping = 0
+	grand_total = 0
+	
+	if user_is:
+		cart_items = CartItem.objects.filter(user=user_obj, is_active=True)
+	else:
+		cart = Cart.objects.get(cart_id=_cart_id(request_1))
+		cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+	for cart_item in cart_items:
+		total += (round(float(cart_item.product.price), 2) * cart_item.quantity)
+		quantity += cart_item.quantity
+	shipping = 9.99
+	grand_total = total + shipping
 
-	context = {
+	return {
 		'total': total,
 		'quantity': quantity,
 		'cart_items': cart_items,
 		'shipping': shipping,
 		'grand_total': grand_total,
 	}
+
+
+def cart(request, total=0, quantity=0, cart_items=None):
+	user_is = request.user.is_authenticated
+	user_obj = request.user
+	context = cart_order_calc(
+		user_is, user_obj, request, total, quantity, cart_items
+	)
 	return render(request, "shop/cart.html", context)
 
 
 @login_required(login_url='login')
 def checkout(request, total=0, quantity=0, cart_items=None):
-	try:
-		shipping = 0
-		grand_total = 0
-		if request.user.is_authenticated:
-			cart_items = CartItem.objects.filter(user=request.user, is_active=True)
-		else:
-			cart = Cart.objects.get(cart_id=_cart_id(request))
-			cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-		for cart_item in cart_items:
-			total += (int(float(cart_item.product.price)) * cart_item.quantity)
-			quantity += cart_item.quantity
-		shipping = 9.99
-		grand_total = total + shipping
-	except ObjectDoesNotExist:
-		pass
-
-	context = {
-		'total': total,
-		'quantity': quantity,
-		'cart_items': cart_items,
-		'shipping': shipping,
-		'grand_total': grand_total,
-	}
+	user_is = request.user.is_authenticated
+	user_obj = request.user
+	context = cart_order_calc(
+		user_is, user_obj, request, total, quantity, cart_items
+	)
 	return render(request, "shop/checkout.html", context)
 
 # Blog
