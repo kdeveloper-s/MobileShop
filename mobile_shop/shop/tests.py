@@ -1,44 +1,49 @@
-from os import name, path
-from django.http import response
-from django.shortcuts import redirect
-from django.test import TestCase, RequestFactory
-from .views import cart, home
-from django.contrib.auth.models import User, AnonymousUser
-from django.conf import settings
-from .models import Cart, CartItem, Category, Headphones
-from .views import cart
+from django.test import TestCase
+from django.contrib.auth.models import User
+from django.urls.base import resolve
+from .views import cart, guide, products, home, search
 
 # Create your tests here.
 
 
-class URLTests(TestCase):
-    def test_testhomepage(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
+class URLTestsCase(TestCase):
 
-class ShopTestCase(TestCase):
+    def test_testhomepage(self):
+        found = resolve('/')
+        self.assertEqual(found.func, home)
+
+    def test_procuts_page(self):
+        found = resolve('/products/')
+        self.assertEqual(found.func, products)
+
+    def test_guide_page(self):
+        found = resolve('/guide/')
+        self.assertEqual(found.func, guide)
+
+    def test_search_page(self):
+        found = resolve('/search/')
+        self.assertEqual(found.func, search)
+
+    def test_guide_page(self):
+        found = resolve('/cart/')
+        self.assertEqual(found.func, cart)
+
+
+
+
+class UserTestCase(TestCase):
     def setUp(self):
-        self.user = User(username="noname", email="noname@example.com", password="dasd213sd@")
-        self.user.save()
+        self.credentials = {
+            'username': 'testuser',
+            'password': 'secret'}
+        User.objects.create_user(**self.credentials)
 
     def test_user_exist(self):
         user_count = User.objects.all().count()
         self.assertEqual(user_count, 1)
         self.assertNotEqual(user_count, 0)
 
+    def test_login(self):
+        response = self.client.post('/login/', self.credentials, follow=True)
+        self.assertTrue(response.context['user'].is_active)
 
-
-
-    # def test_login_url(self):
-    #     # login_url = "/login"
-    #     # self.assertEqual(settings.LOGIN_URL, login_url)
-    #     login_url = settings.LOGIN_URL
-    #     # response = self.client.post(url, {}, follow=True)
-    #     data = {"username": "noname", "password": "dasd213sd@"}
-    #     response = self.client.post(login_url, data, follow=True)
-    #     print(response.request)
-    #     # print(dir(response))
-    #     status_code = response.status_code
-    #     redirect_path = response.request.get("PATH_INFO")
-    #     self.assertEqual(redirect_path, settings.LOGIN_REDIRECT_URL)
-    #     self.assertEqual(status_code, 200)
