@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.core.paginator import Paginator
 # from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
-import requests
 
 from .models import *
 
