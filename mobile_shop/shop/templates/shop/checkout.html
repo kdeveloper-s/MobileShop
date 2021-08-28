@@ -60,7 +60,7 @@
 </article> <!-- card.// -->
 
 
-<article class="card mb-4">
+{% comment %} <article class="card mb-4">
 <div class="card-body">
 	<h4 class="card-title mb-4">Delivery info</h4>
 	<form action="">
@@ -145,7 +145,7 @@
 	</div> <!-- collapse .// -->
 	</div> <!-- card.// -->
 	
-</article> 
+</article>  {% endcomment %}
 <!-- accordion end.// -->
   
 		</main> <!-- col.// -->
@@ -157,7 +157,7 @@
 			  <dd class="text-right">{{total}} €</dd>
 			</dl>
 			<dl class="dlist-align">
-			  <dt>Tax:</dt>
+			  <dt>Shipping:</dt>
 			  <dd class="text-right">{{shipping}} €</dd>
 			</dl>
 			<dl class="dlist-align">
@@ -166,9 +166,9 @@
 			</dl>
 			<hr>
 			<p class="text-center mb-3">
-				<img src="./images/misc/payments.png" height="26">
+				<img src="{% static 'images/misc/payments.png' %}" height="26">
 			</p>
-			<a href="./place-order.html" class="btn btn-primary btn-block"> Place Order </a>
+			<a href="#" class="btn btn-primary btn-block"> Buy Now </a>
 			
 		</div> <!-- card-body.// -->
 		</div> <!-- card.// -->

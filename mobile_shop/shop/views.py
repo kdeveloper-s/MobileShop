@@ -37,6 +37,7 @@ def home(request):
 	return render(request, "home.html", context)
 
 
+# Refactoring NEEDED!!!
 def products(request, category_slug=None):
 	categories = None
 	products = None
@@ -95,6 +96,7 @@ def _cart_id(request):
 	return cart
 
 
+# Refactoring is REQUIRED!!!!
 def add_cart(request, product_id):
 	current_user= request.user
 	product = Product.objects.get(id=product_id)
@@ -136,14 +138,14 @@ def add_cart(request, product_id):
 		return redirect('cart')
 
 
-def remove_cart(request, product_id):#, cart_item_id):
+def remove_cart(request, product_id):
 	product = get_object_or_404(Product, id=product_id)
 	try:
 		if request.user.is_authenticated:
-			cart_item = CartItem.objects.get(product=product, user=request.user)#, id=cart_item_id)
+			cart_item = CartItem.objects.get(product=product, user=request.user)
 		else:
 			cart = Cart.objects.get(cart_id=_cart_id(request))
-			cart_item = CartItem.objects.get(product=product, cart=cart)#, id=cart_item_id)
+			cart_item = CartItem.objects.get(product=product, cart=cart)
 		if cart_item.quantity > 1:
 			cart_item.quantity -= 1
 			cart_item.save()
@@ -154,13 +156,13 @@ def remove_cart(request, product_id):#, cart_item_id):
 	return redirect('cart')
 
 
-def remove_cart_item(request, product_id):#, cart_item_id):
+def remove_cart_item(request, product_id):
 	product = get_object_or_404(Product, id=product_id)
 	if request.user.is_authenticated:
-		cart_item = CartItem.objects.get(product=product, user=request.user)#, id=cart_item_id)
+		cart_item = CartItem.objects.get(product=product, user=request.user)
 	else:
 		cart = Cart.objects.get(cart_id=_cart_id(request))
-		cart_item = CartItem.objects.get(product=product, cart=cart)#, id=cart_item_id)
+		cart_item = CartItem.objects.get(product=product, cart=cart)
 	cart_item.delete()
 	return redirect('cart')
 
@@ -249,11 +251,6 @@ def guide(request):
 		
 		
 	return render(request, "shop/guide.html", context={"articles" : articles_list})
-	
-
-
-def register(request):
-    return render(request, "shop/register.html")
 
 
 def register_request(request):
@@ -395,3 +392,4 @@ def password_reset_done(request):
 	print(f'Request::: {request}')
 	return render(request=request, template_name="password/password_reset_done.html")
 	# return HttpResponse('Password reset link sent!')
+	
