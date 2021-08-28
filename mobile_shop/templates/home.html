@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+{% comment %} WELCOME SCREEN START {% endcomment %}
+
+<main class="bg-white">
+<div style="font-family: sans-serif;">
+    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-white" style="max-width:100%">
+
+        {% if user.is_authenticated %}
+        <h1 class="display-4 fw-normal" style="font-family: sans-serif;">Hi, {{ user.get_username|title }} &#128522;</h1>
+        {% else %}
+        <h1 class="display-4 fw-normal" style="font-family: sans-serif;">Hello Guest</h1>
+        {% endif %}
+        
+        <div class="col-md-12 p-lg-5 mx-auto my-5">
+            <div class="image">
+                <img class="image__img" src="../static/images/guide_cover.png" alt="Smartphones" width="100%">
+                
+                <div class="image__overlay .image__overlay--blur">
+                    <p class="lead fw-normal" style="margin: 2rem 0 2rem 0;">Don't know what device to choose? Read our smartphone Buying Guide - How to
+                        buy
+                        the best mobile phone.</p>
+                    <a href="{% url 'guide' %}"><button type="button" class="btn btn-primary"
+                            style="padding: 6px 12px; background-image: linear-gradient(to left, rgba(255,0,0,0), rgba(255,0,0,1));">
+                            <h3>Read Now</h3>
+                        </button></a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="bg-white col-md-12 p-lg-5 mx-auto my-5" style="display: flex;" >
+
+
+
+            <table width="auto">
+                <tr>
+                    <table style="width:auto">
+                        <tr>
+                            <th>
+                                <h1>Smartphones</h1>
+                            </th>
+                            <th>
+                                <h1>Smartwatches</h1>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="image">
+                                    <img class="image__img" src="../static/1_smartphone.png" alt="Smartphones">
+                                    <div class="image__overlay .image__overlay--blur">
+                                        <a href="{{ links.0.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 6px 12px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h4>Shop Now</h4>
+                                            </button></a>
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div class="image">
+                                    <img class="image__img" src="../static/2_smartwatch.png" alt="Smartwatch">
+                                    <div class="image__overlay .image__overlay--blur">
+                                        <a href="{{ links.1.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 6px 12px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h4>Shop Now</h4>
+                                            </button></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </tr>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <tr>
+                    <table style="width:auto">
+                        <tr>
+                            <th>
+                                <h1>Headphones</h1>
+                            </th>
+                            <th>
+                                <h1>Earbuds</h1>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="image">
+                                    <img class="image__img" src="../static/3_headphones.png" alt="Headphones">
+                                    <div class="image__overlay .image__overlay--blur">
+                                        <a href="{{ links.2.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 6px 12px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h4>Shop Now</h4>
+                                            </button></a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="image">
+                                    <img class="image__img" src="../static/4_earbuds.png" alt="Earbuds">
+                                    <div class="image__overlay .image__overlay--blur">
+                                        <a href="{{ links.3.get_url }}"><button type="button" class="btn btn-primary"
+                                                style="padding: 6px 12px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));">
+                                                <h4>Shop Now</h4>
+                                            </button></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+</main>
+
+{% comment %} WELCOME SCREEN END {% endcomment %}
+
+<!-- ========================= SECTION  ========================= -->
+<section class="section-name padding-y-sm">
+    <div class="container">
+
+        <header class="section-heading">
+            <a href="{% url 'products' %}" class="btn btn-outline-primary float-right">See all</a>
+            <h3 class="section-title">Popular products</h3>
+        </header><!-- sect-heading -->
+
+
+	
+<div class="row">
+    {% for product in products %}
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="{{ product.get_url }}" class="img-wrap"> <img src="{{ product.thumbnail }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="{{ product.get_url }}" class="title">{{ product.name }}</a>
+				<div class="price mt-1">{{ product.price }} €</div> <!-- price-wrap.// -->
+			</figcaption>
+		</div>
+	</div> <!-- col.// -->
+    {% endfor %}
+</div> <!-- row.// -->
+
+    </div><!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+
+{% endblock %}
