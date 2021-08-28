@@ -1,11 +1,12 @@
-from django.core import paginator
+# from django.core import paginator
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import query
-from django.db.models.aggregates import Count
-from django.db.models.fields import NullBooleanField
-from django.db.models.query import EmptyQuerySet
-from django.shortcuts import get_object_or_404, render, redirect
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+# from django.db.models import query
+# from django.db.models.aggregates import Count
+# from django.db.models.fields import NullBooleanField
+# from django.db.models.query import EmptyQuerySet
+from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
+from django.core.paginator import Paginator
+# from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
 import requests
 
@@ -28,34 +29,32 @@ import requests
 import pandas as pd
 from django.conf import settings
 
+
 def home(request):
 	products = Product.objects.all().order_by('-price')[:8]
-
 	context = {
 		'products': products,
 	}
 	return render(request, "home.html", context)
 
 
-# Refactoring NEEDED!!!
 def products(request, category_slug=None):
 	categories = None
 	products = None
 
 	if category_slug != None:
+		# TODO: Refactor
 		categories = get_object_or_404(Category, slug=category_slug)
+		#
 		products = Product.objects.filter(category=categories)
-		paginator = Paginator(products, 21)
-		page = request.GET.get('page')
-		paged_products = paginator.get_page(page)
-		product_count = products.count()
 	else:
 		products = Product.objects.all()
-		paginator = Paginator(products, 21)
-		page = request.GET.get('page')
-		paged_products = paginator.get_page(page)
-		product_count = products.count()
-	
+
+	paginator = Paginator(products, 21)
+	page = request.GET.get('page')
+	paged_products = paginator.get_page(page)
+	product_count = products.count()
+
 	context = {
 		'products': paged_products,
 		'product_count': product_count,
@@ -65,8 +64,10 @@ def products(request, category_slug=None):
 
 def product_detail(request, category_slug, product_slug):
 	try:
-		single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
-		in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
+		single_product = Product.objects.get(
+			category__slug=category_slug, slug=product_slug)
+		in_cart = CartItem.objects.filter(
+			cart__cart_id=_cart_id(request), product=single_product).exists()
 	except Exception as e:
 		raise e
 	context = {
@@ -96,44 +97,44 @@ def _cart_id(request):
 	return cart
 
 
-# Refactoring is REQUIRED!!!!
 def add_cart(request, product_id):
-	current_user= request.user
+	current_user = request.user
 	product = Product.objects.get(id=product_id)
 	if current_user.is_authenticated:
-		try:
+		if CartItem.DoesNotExist:
+			cart_item = CartItem.objects.create(
+				product=product,
+				quantity=1,
+				user=current_user,
+			)
+		else:
 			cart_item = CartItem.objects.get(product=product, user=current_user)
 			cart_item.quantity += 1
-			cart_item.save()
-		except CartItem.DoesNotExist:
-			cart_item = CartItem.objects.create(
-				product = product,
-				quantity = 1,
-				user = current_user,
-			)
 		cart_item.save()
+
 		return redirect('cart')
 
 	# If user is not authenticated
 	else:
-		try:
-			cart = Cart.objects.get(cart_id=_cart_id(request))
-		except Cart.DoesNotExist:
+		if Cart.DoesNotExist:
 			cart = Cart.objects.create(
-				cart_id = _cart_id(request)
+				cart_id=_cart_id(request)
 			)
+		else:
+			cart = Cart.objects.get(cart_id=_cart_id(request))
+
 		cart.save()
 
-		try:
+		if CartItem.DoesNotExist:
+			cart_item = CartItem.objects.create(
+				product=product,
+				quantity=1,
+				cart=cart,
+			)
+		else:
 			cart_item = CartItem.objects.get(product=product, cart=cart)
 			cart_item.quantity += 1
-			cart_item.save()
-		except CartItem.DoesNotExist:
-			cart_item = CartItem.objects.create(
-				product = product,
-				quantity = 1,
-				cart = cart,
-			)
+
 		cart_item.save()
 		return redirect('cart')
 
@@ -222,10 +223,12 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 	return render(request, "shop/checkout.html", context)
 
 # Blog
+
+
 def guide(request):
 
 	params = dict(
-		q = "Smartphones",
+		q="Smartphones",
 		sortBy="relevancy",
 		from_param="2021-08-25",
 		apiKey=f"{settings.API_KEY}"
@@ -241,16 +244,16 @@ def guide(request):
 	for i in data['articles']:
 		date_pub = i['publishedAt']
 		timestamps.append(date_pub)
-		df = pd.DataFrame({'TIME_STAMP':timestamps})
+		df = pd.DataFrame({'TIME_STAMP': timestamps})
 		df["TIME_STAMP"] = pd.to_datetime(df["TIME_STAMP"])
 		df["DATE"] = df["TIME_STAMP"].dt.date
 		formatted_dates = df["DATE"]
 		article_date = formatted_dates[data['articles'].index(i)]
 		article_date = str(article_date)
-		articles_list.append({'title': i['title'], 'description':i['description'],'url':i['url'], 'urlToImage':i['urlToImage'], 'published':article_date})
-		
-		
-	return render(request, "shop/guide.html", context={"articles" : articles_list})
+		articles_list.append({'title': i['title'], 'description': i['description'],
+		                     'url': i['url'], 'urlToImage': i['urlToImage'], 'published': article_date})
+
+	return render(request, "shop/guide.html", context={"articles": articles_list})
 
 
 def register_request(request):
@@ -266,17 +269,18 @@ def register_request(request):
 			subject = "Registration successful."
 			email_template_name = "password/new_user_greeting.txt"
 			c = {
-			"email":user.email,
-			'domain':'127.0.0.1:8000',
-			'site_name': 'MobileShop',
-			"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-			"user": user,
-			'token': default_token_generator.make_token(user),
-			'protocol': 'http',
+                            "email": user.email,
+                            'domain': '127.0.0.1:8000',
+                            'site_name': 'MobileShop',
+                            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                            "user": user,
+                            'token': default_token_generator.make_token(user),
+                            'protocol': 'http',
 			}
 			email = render_to_string(email_template_name, c)
 			try:
-				send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
+				send_mail(subject, email, 'admin@example.com',
+				          [user.email], fail_silently=False)
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
 			# ----------------------------------------------------
@@ -306,7 +310,7 @@ def login_request(request):
 						for item in cart_item:
 							products = item.product
 							cart_products.append(products)
-						
+
 						# Get cart items from user
 						cart_item = CartItem.objects.filter(user=user)
 						user_products = []
@@ -315,7 +319,7 @@ def login_request(request):
 							existing_products = item.product
 							user_products.append(existing_products)
 							id.append(item.id)
-						
+
 						for pr in cart_products:
 							if pr in user_products:
 								print("if pr in user_products if block")
@@ -371,25 +375,26 @@ def password_reset_request(request):
 					subject = "Password Reset Requested"
 					email_template_name = "password/password_reset_email.txt"
 					c = {
-					"email":user.email,
-					'domain':'127.0.0.1:8000',
-					'site_name': 'MobileShop',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
+                                            "email": user.email,
+                                            'domain': '127.0.0.1:8000',
+                                            'site_name': 'MobileShop',
+                                            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                                            "user": user,
+                                            'token': default_token_generator.make_token(user),
+                                            'protocol': 'http',
 					}
 					email = render_to_string(email_template_name, c)
 					try:
-						send_mail(subject, email, 'admin@example.com' , [user.email], fail_silently=False)
+						send_mail(subject, email, 'admin@example.com',
+						          [user.email], fail_silently=False)
 					except BadHeaderError:
 						return HttpResponse('Invalid header found.')
-					return redirect ("/password_reset_done")
+					return redirect("/password_reset_done")
 	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form":password_reset_form})
+	return render(request=request, template_name="password/password_reset.html", context={"password_reset_form": password_reset_form})
+
 
 def password_reset_done(request):
 	print(f'Request::: {request}')
 	return render(request=request, template_name="password/password_reset_done.html")
 	# return HttpResponse('Password reset link sent!')
-	
