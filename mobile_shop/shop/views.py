@@ -36,6 +36,7 @@ def home(request):
 	return render(request, "home.html", context)
 
 
+# Refactoring NEEDED!!!
 def products(request, category_slug=None):
 	categories = None
 	products = None
@@ -94,6 +95,7 @@ def _cart_id(request):
 	return cart
 
 
+# Refactoring is REQUIRED!!!!
 def add_cart(request, product_id):
 	current_user= request.user
 	product = Product.objects.get(id=product_id)
@@ -249,11 +251,6 @@ def guide(request):
 		
 		
 	return render(request, "shop/guide.html", context={"articles" : articles_list})
-	
-
-
-def register(request):
-    return render(request, "shop/register.html")
 
 
 def register_request(request):
@@ -395,3 +392,4 @@ def password_reset_done(request):
 	print(f'Request::: {request}')
 	return render(request=request, template_name="password/password_reset_done.html")
 	# return HttpResponse('Password reset link sent!')
+	
