@@ -9,38 +9,38 @@ Getting Started
 ## From within the repo directory, first remove git tracking from the project  
 
 ```bash
-rm -rf .git
+$ rm -rf .git
 ```
 
 ## Initialize a new git repository:
 ```bash
-git init
+$ git init
 ```
 
 ## Create new virtual enviroment
 ```bash
-python3 -m venv venv
+$ python3 -m venv venv
 ```
 
 ## Activate new virtual enviroment
 
 Linux/MacOS:
 ```bash
-source /venv/bin/activate
+$ source /venv/bin/activate
 ```
 Windows:
 ```bash
-.\venv\Scripts\Activate
+$ .\venv\Scripts\Activate
 ```
 
 ## Install requirements:
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ## Run server:
 ```bash
-python manage.py runserver
+$ python manage.py runserver
 ```
 
 # Main page
