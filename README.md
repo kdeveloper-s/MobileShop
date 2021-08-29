@@ -92,11 +92,11 @@ Project Organization
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/kstekels"><img src="https://avatars.githubusercontent.com/u/31929901?v=4" width="100px;" alt=""/><br /><sub><b>Christian Erhardt</b>
+    <td align="center"><a href="https://github.com/kstekels"><img src="https://avatars.githubusercontent.com/u/31929901?v=4" width="100px;" alt=""/><br /><sub><b>Karlis Stekels</b>
       </sub>
       </a>
     </td>
-    <td align="center"><a href="https://github.com/jaz3ps"><img src="https://avatars.githubusercontent.com/u/77325378?v=4" width="100px;" alt=""/><br /><sub><b>Jeff Billimek</b>
+    <td align="center"><a href="https://github.com/jaz3ps"><img src="https://avatars.githubusercontent.com/u/77325378?v=4" width="100px;" alt=""/><br /><sub><b>Jazeps Ivulis</b>
       </sub>
       </a>
     </td>
