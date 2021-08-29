@@ -8,7 +8,7 @@
         <aside class="col-md-6">
           <article class="gallery-wrap">
             <div class="img-big-wrap">
-              <a><img src="{{ single_product.thumbnail }}"></a>
+              <a><img style="object-fit: fit; padding: 2rem;" src="{{ single_product.thumbnail }}"></a>
             </div>
           </article>
         </aside>
@@ -48,7 +48,7 @@
             <a href="{% url 'cart' %}" class="btn btn-outline-primary"> <span class="text">View Cart</span><i
                 class="fas fa-eye"></i></a>
             {% else %}
-            <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary"> <span class="text">Add
+            <a href="{% url 'add_cart' single_product.id %}?from=single_product" class="btn btn-primary"> <span class="text">Add
                 to Cart</span> <i class="fas fa-shopping-cart"></i> </a>
             {% endif %}
           </article>
@@ -64,26 +64,26 @@
         <article class="box mb-3">
           <div class="icontext w-100">
             {% if 'smartphones' in request.path %}
-            <div class="text">
-              <h6 class="mb-1">Internal memory: {{ single_product.smartphone.internal_memory }}</h6>
-              <h6 class="mb-1">RAM: {{ single_product.smartphone.ram }}</h6>
-              <h6 class="mb-1">Memory card support: {{ single_product.smartphone.memory_card_support }}</h6>
-              <h6 class="mb-1">Memory card type: {{ single_product.smartphone.memory_card_type }}</h6>
-              <h6 class="mb-1">Processor: {{ single_product.smartphone.processor }}</h6>
-              <h6 class="mb-1">Operating system: {{ single_product.smartphone.operating_system }}</h6>
-              <h6 class="mb-1">Screen size: {{ single_product.smartphone.screen_size }}"</h6>
-              <h6 class="mb-1">Screen resolution: {{ single_product.smartphone.screen_resolution }}</h6>
-              <h6 class="mb-1">Screen type: {{ single_product.smartphone.screen_type }}</h6>
-              <h6 class="mb-1">Video camera: {{ single_product.smartphone.video_camera }}</h6>
-              <h6 class="mb-1">SIM card type: {{ single_product.smartphone.sim_card_type }}</h6>
-              <h6 class="mb-1">Weight: {{ single_product.smartphone.weight }}g</h6>
-              <h6 class="mb-1">5G bands: {{ single_product.smartphone.network_5g_bands }}</h6>
-              <h6 class="mb-1">4G bands: {{ single_product.smartphone.network_4g_bands }}</h6>
-              <h6 class="mb-1">3G bands: {{ single_product.smartphone.network_3g_bands }}</h6>
-              <h6 class="mb-1">2G bands: {{ single_product.smartphone.network_2g_bands }}</h6>
-              <h6 class="mb-1">Wi-Fi: {{ single_product.smartphone.wifi }}</h6>
-              <h6 class="mb-1">Body dimensions: {{ single_product.smartphone.body_dimensions }}</h6>
-              <h6 class="mb-1">Battery: {{ single_product.smartphone.battery }}mAh</h6>
+            <div class="text" style="inline-size: 100%px; overflow-wrap: break-word; hyphens: manual; padding: 1rem;">
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Internal memory: {{ single_product.smartphone.internal_memory }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">RAM: {{ single_product.smartphone.ram }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Memory card support: {{ single_product.smartphone.memory_card_support }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Memory card type: {{ single_product.smartphone.memory_card_type }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Processor: {{ single_product.smartphone.processor }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Operating system: {{ single_product.smartphone.operating_system }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Screen size: {{ single_product.smartphone.screen_size }}"</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Screen resolution: {{ single_product.smartphone.screen_resolution }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Screen type: {{ single_product.smartphone.screen_type }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Video camera: {{ single_product.smartphone.video_camera }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">SIM card type: {{ single_product.smartphone.sim_card_type }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Weight: {{ single_product.smartphone.weight }}g</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">5G bands: {{ single_product.smartphone.network_5g_bands }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">4G bands: {{ single_product.smartphone.network_4g_bands }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">3G bands: {{ single_product.smartphone.network_3g_bands }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">2G bands: {{ single_product.smartphone.network_2g_bands }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Wi-Fi: {{ single_product.smartphone.wifi }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Body dimensions: {{ single_product.smartphone.body_dimensions }}</h6>
+              <h6 class="mb-1" style="margin-top: 0.4rem;">Battery: {{ single_product.smartphone.battery }}mAh</h6>
             </div>
             {% elif 'smartwatches' in request.path %}
             <div class="text">

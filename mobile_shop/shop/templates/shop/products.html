@@ -35,7 +35,7 @@
                 <ul class="list-menu">
                   <li><a href="{% url 'products' %}">All products</a></li>
                   {% for category in links %}
-                  <li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
+                  <li><a class="ahref-categories" href="{{ category.get_url }}">{{ category.name }}</a></li>
                   {% endfor %}
                 </ul>
               </div>
@@ -54,19 +54,18 @@
           <div class="col-md-4">
             <figure class="card card-product-grid">
               <div class="img-wrap">
-                <a href="{{ product.get_url }}"><img style='height: 100%; width: 100%; object-fit: contain'
+                <a href="{{ product.get_url }}"><img style="height: 100%; width: 100%; object-fit: contain; padding: 0.5rem;"
                     src="{{ product.thumbnail }}"></a>
               </div>
               <figcaption class="info-wrap">
                 <div class="fix-height">
                   <a href="{{ product.get_url }}" class="title">{{ product.name }}</a>
                   <div class="price-wrap mt-2">
-                    <h2><span class="price">{{ product.price }} €</span></h2>
+                    <h4><span class="price">{{ product.price }} €</span></h4>
                   </div>
                 </div>
-                {% if in_cart %}
-                <a href="#" class="btn btn-success"> <span class="text">Added to Cart</span><i
-                    class="fas fa-check"></i></a>
+                {% if product.id in cart_product_ids %}
+                <a href="#" class="btn btn-block btn-success"> <span class="text">Added to Cart</span><i class="fas fa-check"></i></a>
                 {% else %}
                 <a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">Add to Cart</a>
                 {% endif %}
