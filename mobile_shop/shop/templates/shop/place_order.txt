@@ -1,0 +1,15 @@
+{% autoescape off %}
+Hello {{ user|title }},
+Greetings from MobileShop!
+
+We are glad to announce that your order has been placed and will arrive to you shortly :)
+
+
+If you have any questions, you can reach us out in email: smartmobileshop12345@gmail.com
+
+Sincerely,
+The Mobile Shop Team
+
+website: {{ protocol }}://{{domain}}
+
+{% endautoescape %}

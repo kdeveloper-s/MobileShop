@@ -8,13 +8,13 @@ from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.core.paginator import Paginator
 # from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
+from numpy.ma.core import product
 import requests
 
 from .models import *
 
 from .forms import NewUserForm
 from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
@@ -43,32 +43,41 @@ def products(request, category_slug=None):
 	products = None
 
 	if category_slug != None:
-		# TODO: Refactor
 		categories = get_object_or_404(Category, slug=category_slug)
-		#
 		products = Product.objects.filter(category=categories)
 	else:
 		products = Product.objects.all()
-
 	paginator = Paginator(products, 21)
 	page = request.GET.get('page')
 	paged_products = paginator.get_page(page)
 	product_count = products.count()
 
+	current_user = request.user
+	if current_user.is_authenticated:
+		in_cart = CartItem.objects.filter(user=current_user)
+		cart_product_ids = [x.product.id for x in in_cart]
+	else:
+		in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request))
+		cart_product_ids = [x.product.id for x in in_cart]
+
 	context = {
 		'products': paged_products,
 		'product_count': product_count,
+		'cart_product_ids': cart_product_ids,
 	}
 	return render(request, "shop/products.html", context)
 
 
 def product_detail(request, category_slug, product_slug):
 	current_user = request.user
-	single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+	single_product = Product.objects.get(
+		category__slug=category_slug, slug=product_slug)
 	if current_user.is_authenticated:
-		in_cart = CartItem.objects.filter(user=current_user, product=single_product).exists()
+		in_cart = CartItem.objects.filter(
+			user=current_user, product=single_product).exists()
 	else:
-		in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
+		in_cart = CartItem.objects.filter(
+			cart__cart_id=_cart_id(request), product=single_product).exists()
 	context = {
 		'single_product': single_product,
 		'in_cart': in_cart,
@@ -101,6 +110,7 @@ def add_cart(request, product_id):
 	product = Product.objects.get(id=product_id)
 	category_slug = product.category.slug
 	product_slug = product.slug
+	request_from = request.GET.get("from")
 	if current_user.is_authenticated:
 		try:
 			cart_item = CartItem.objects.get(product=product, user=current_user)
@@ -114,8 +124,10 @@ def add_cart(request, product_id):
 				user=current_user,
 			)
 			cart_item.save()
-			return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug,}))
-
+			if request_from == "single_product":
+				return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug, }))
+			else:
+				return redirect(reverse('products_by_category', kwargs={"category_slug": category_slug}))
 	else:
 		try:
 			cart = Cart.objects.get(cart_id=_cart_id(request))
@@ -137,7 +149,10 @@ def add_cart(request, product_id):
 				cart=cart,
 			)
 			cart_item.save()
-			return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug,}))
+			if request_from == "single_product":
+				return redirect(reverse('product_detail', kwargs={"category_slug": category_slug, "product_slug": product_slug, }))
+			else:
+				return redirect(reverse('products_by_category', kwargs={"category_slug": category_slug}))
 
 
 def remove_cart(request, product_id):
@@ -166,21 +181,30 @@ def remove_cart_item(request, product_id):
 	return redirect('cart')
 
 
+def remove_all_cart_items(request):
+	if request.user.is_authenticated:
+		all_cart_items = CartItem.objects.filter(user=request.user)
+	else:
+		return redirect('login')
+	all_cart_items.delete()
+
+
 def cart_order_calc(user_is, user_obj, request_1, total, quantity, cart_items):
 	shipping = 0
 	grand_total = 0
-	
-	if user_is:
-		cart_items = CartItem.objects.filter(user=user_obj, is_active=True)
-	else:
-		cart = Cart.objects.get(cart_id=_cart_id(request_1))
-		cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-	for cart_item in cart_items:
-		total += (round(float(cart_item.product.price), 2) * cart_item.quantity)
-		quantity += cart_item.quantity
-	shipping = 9.99
-	grand_total = total + shipping
-
+	try:
+		if user_is:
+			cart_items = CartItem.objects.filter(user=user_obj, is_active=True)
+		else:
+			cart = Cart.objects.get(cart_id=_cart_id(request_1))
+			cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+		for cart_item in cart_items:
+			total += (round(float(cart_item.product.price), 2) * cart_item.quantity)
+			quantity += cart_item.quantity
+		shipping = 9.99
+		grand_total = total + shipping
+	except:
+		pass
 	return {
 		'total': total,
 		'quantity': quantity,
@@ -207,8 +231,6 @@ def checkout(request, total=0, quantity=0, cart_items=None):
 		user_is, user_obj, request, total, quantity, cart_items
 	)
 	return render(request, "shop/checkout.html", context)
-
-# Blog
 
 
 def guide(request):
@@ -248,9 +270,6 @@ def register_request(request):
 		if form.is_valid():
 			user = form.save()
 			login(request, user)
-			messages.success(request, "Registration successful.")
-
-			# ----------------------------------------------------
 
 			subject = "Registration successful."
 			email_template_name = "password/new_user_greeting.txt"
@@ -269,10 +288,8 @@ def register_request(request):
 				          [user.email], fail_silently=False)
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
-			# ----------------------------------------------------
 
 			return redirect("/")
-		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render(request=request, template_name="registration/register_request.html", context={"register_form": form})
 
@@ -291,13 +308,11 @@ def login_request(request):
 					if is_cart_item_exists:
 						cart_item = CartItem.objects.filter(cart=cart)
 
-						# Getting products by cart id
 						cart_products = []
 						for item in cart_item:
 							products = item.product
 							cart_products.append(products)
 
-						# Get cart items from user
 						cart_item = CartItem.objects.filter(user=user)
 						user_products = []
 						id = []
@@ -323,7 +338,6 @@ def login_request(request):
 				except:
 					pass
 				login(request, user)
-				# messages.info(request, f"You are now logged in as {username}.")
 				url = request.META.get('HTTP_REFERER')
 				try:
 					query = requests.utils.urlparse(url).query
@@ -334,10 +348,8 @@ def login_request(request):
 				except:
 					return redirect("/")
 			else:
-				# messages.error(request, "Invalid username or password.")
 				pass
 		else:
-			# messages.error(request, "Invalid username or password.")
 			pass
 	form = AuthenticationForm()
 	return render(request=request, template_name="registration/login_request.html", context={"login_form": form})
@@ -346,7 +358,6 @@ def login_request(request):
 @login_required(login_url='login')
 def logout_request(request):
 	logout(request)
-	messages.info(request, "Logged out successfully!")
 	return redirect("/")
 
 
@@ -383,4 +394,26 @@ def password_reset_request(request):
 def password_reset_done(request):
 	print(f'Request::: {request}')
 	return render(request=request, template_name="password/password_reset_done.html")
-	# return HttpResponse('Password reset link sent!')
+
+
+def place_order(request):
+	user = request.user
+	subject = "Your order has been placed."
+	email_template_name = "shop/place_order.txt"
+	c = {
+					"email": user.email,
+					'domain': '127.0.0.1:8000',
+					'site_name': 'MobileShop',
+					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+					"user": user,
+					'token': default_token_generator.make_token(user),
+					'protocol': 'http',
+	}
+	email = render_to_string(email_template_name, c)
+	try:
+		send_mail(subject, email, 'admin@example.com',
+					[user.email], fail_silently=False)
+	except BadHeaderError:
+		return HttpResponse('Invalid header found.')
+	remove_all_cart_items(request)
+	return render(request=request, template_name="shop/place_order_done.html")

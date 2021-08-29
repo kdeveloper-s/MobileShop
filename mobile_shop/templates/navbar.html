@@ -9,10 +9,10 @@
             <img class="logo" src="{% static 'images/logo.png' %}" width=110% height="120%">
           </a>
         </div>
-        <a href="{% url 'products' %}" class="btn btn-primary">All products</a>
+        <a href="{% url 'products' %}" class="btn btn-outline-gray">All products</a>
         <div class="col-lg col-sm col-md col-6 flex-grow-0">
           <div class="category-wrap dropdown d-inline-block float-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-outline-gray dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bars"></i> Categories
             </button>
             <div class="dropdown-menu">
@@ -28,7 +28,7 @@
               <input type="text" class="form-control" style="width:60%;" placeholder="Search" name="keyword"
                 required="required">
               <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-outline-gray" type="submit">
                   <i class="fa fa-search"></i>
                 </button>
               </div>
@@ -44,7 +44,6 @@
             {% endif %}
             <div>
               {% if user.is_authenticated %}
-              <a href="">My Account</a> <span class="dark-transp"> | </span>
               <a href="{% url 'logout' %}"> Sign Out</a>
               {% else %}
               <a href="{% url 'login' %}">Sign in</a> <span class="dark-transp"> | </span>

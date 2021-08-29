@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container p-5">
+    <h2 class="font-weight-bold mt-3">Your order has been placed!</h2>
+    <hr>
+    <p>We've emailed you details about the order. You should receive them shortly.
+        <br>Please, click on the button below, if you want to explore more products.
+    </p>
+
+    <a href="{% url 'products' %}"><button class="btn btn-primary" type="submit">Continue Shopping</button>
+</div></a>
+
+{% endblock %}
