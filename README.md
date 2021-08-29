@@ -6,23 +6,24 @@ MobileShop - eCommerce website project using Python/Django framework
 Getting Started
 ------------
 
-From within the repo directory, first remove git tracking from the project  
+## From within the repo directory, first remove git tracking from the project  
 
 ```bash
 rm -rf .git
 ```
 
-Initialize a new git repository:
+## Initialize a new git repository:
 ```bash
 git init
 ```
 
-Create new virtual enviroment
+## Create new virtual enviroment
 ```bash
 python3 -m venv venv
 ```
 
-Activate new virtual enviroment
+## Activate new virtual enviroment
+
 Linux/MacOS:
 ```bash
 source /venv/bin/activate
@@ -32,12 +33,12 @@ Windows:
 .\venv\Scripts\Activate
 ```
 
-Install requirements:
+## Install requirements:
 ```bash
 pip install -r requirements.txt
 ```
 
-Run server:
+## Run server:
 ```bash
 python manage.py runserver
 ```
@@ -55,7 +56,7 @@ python manage.py runserver
 
 Project Organization
 ------------
-   ...
+   
     ├── /README.md                 <- The top-level README for developers using this project.
     ├── /.gitignore                <- Files, where ignored files is added
     ├── /requirements.txt          <- The requirements file for PIP
@@ -69,7 +70,7 @@ Project Organization
         |   |__ /wsgi.py           <- An entry-point for WSGI-compatible web servers to serve your project. 
         |   |__ /urls.py           <- The URL declarations for this Django project; a “table of contents” of your Django-powered site.
         │
-        ├──./shop                   <- Django App
+        ├──./shop                  <- Django App
         │   └──/views.py           <- controller (Logic)
         |   |__/admin.py           <- admin config
         |   |__/models.py          <- Data models
