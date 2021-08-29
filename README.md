@@ -38,6 +38,16 @@ $ .\venv\Scripts\Activate
 $ pip install -r requirements.txt
 ```
 
+## Make migrations:
+```bash
+$ python manage.py makemigrations
+```
+
+## Make migrate:
+```bash
+$ python manage.py migrate
+```
+
 ## Run server:
 ```bash
 $ python manage.py runserver
