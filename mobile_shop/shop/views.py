@@ -1,18 +1,8 @@
-# from django.core import paginator
 from django.core.exceptions import ObjectDoesNotExist
-# from django.db.models import query
-# from django.db.models.aggregates import Count
-# from django.db.models.fields import NullBooleanField
-# from django.db.models.query import EmptyQuerySet
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
 from django.core.paginator import Paginator
-# from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib.auth.decorators import login_required
-from numpy.ma.core import product
-import requests
-
 from .models import *
-
 from .forms import NewUserForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
